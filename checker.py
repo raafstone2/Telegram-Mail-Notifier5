@@ -63,10 +63,12 @@ def extract_configs(text):
         r"(?:vless|vmess|trojan|ss|ssr)://[^\s]+"
     )
 
-    return re.findall(
+    configs = re.findall(
         pattern,
         text
     )
+
+    return configs
 
 
 
@@ -103,6 +105,7 @@ def send_email(configs):
     msg = MIMEMultipart()
 
     msg["From"] = GMAIL_USER
+
     msg["To"] = GMAIL_TO
 
     msg["Subject"] = (
@@ -158,12 +161,15 @@ def send_email(configs):
 
 messages = get_messages()
 
+
 all_text = "\n\n".join(messages)
+
 
 
 configs = extract_configs(
     all_text
 )
+
 
 
 if not configs:
@@ -185,9 +191,25 @@ old_message = read_old_message()
 
 if config_text != old_message:
 
+
     save_message(
         config_text
     )
 
+
     send_email(
         configs
+    )
+
+
+    print(
+        "ایمیل ارسال شد"
+    )
+
+
+else:
+
+
+    print(
+        "کانفیگ جدیدی وجود ندارد"
+    )
